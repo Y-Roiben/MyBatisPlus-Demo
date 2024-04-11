@@ -1,8 +1,10 @@
 package com.itheima.mp.domain.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.itheima.mp.domain.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,10 +13,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 
-@TableName("tb_user")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName(value = "tb_user", autoResultMap = true)
 public class User {
 
     /**
@@ -41,7 +43,8 @@ public class User {
     /**
      * 详细信息
      */
-    private String info;
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private UserInfo info;
 
     /**
      * 使用状态（1正常 2冻结）

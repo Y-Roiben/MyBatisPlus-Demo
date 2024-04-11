@@ -1,6 +1,7 @@
 package com.itheima.mp.domain.vo;
 
 import com.itheima.mp.domain.enums.UserStatus;
+import com.itheima.mp.domain.po.UserInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,7 +19,7 @@ public class UserVO {
     private String username;
 
     @ApiModelProperty("详细信息")
-    private String info;
+    private UserInfo info;
 
     @ApiModelProperty("使用状态（1正常 2冻结）")
     private UserStatus status;
