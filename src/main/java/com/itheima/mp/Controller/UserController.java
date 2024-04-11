@@ -2,9 +2,10 @@ package com.itheima.mp.Controller;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import com.itheima.mp.domain.dto.PageDTO;
 import com.itheima.mp.domain.dto.UserFormDTO;
 import com.itheima.mp.domain.po.User;
-import com.itheima.mp.query.UserQuery;
+import com.itheima.mp.domain.query.UserQuery;
 import com.itheima.mp.domain.vo.UserVO;
 import com.itheima.mp.service.IUserService;
 import io.swagger.annotations.Api;
@@ -44,9 +45,9 @@ public class UserController {
     public UserVO getUserById(@PathVariable Long id){
         User user = userService.getById(id);
         UserVO userVO = userService.queryUserAndAddress(id);
-
-        UserVO userVO1 = new UserVO();
-        BeanUtils.copyProperties(user, userVO);
+//
+//        UserVO userVO1 = new UserVO();
+//        BeanUtils.copyProperties(user, userVO);
         return userVO;
     }
 
@@ -72,6 +73,11 @@ public class UserController {
         List<User> users = userService.queryUsers(userQuery.getName(), userQuery.getStatus(),
                 userQuery.getMaxBalance(), userQuery.getMinBalance());
         return BeanUtil.copyToList(users, UserVO.class);
+    }
+
+    @GetMapping("/page")
+    public PageDTO<UserVO> queryUsersPage(UserQuery query){
+        return userService.queryUsersPage(query);
     }
 
 }

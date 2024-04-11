@@ -1,11 +1,15 @@
 package com.itheima.mp.service.Impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
+import com.itheima.mp.domain.dto.PageDTO;
 import com.itheima.mp.domain.enums.UserStatus;
 import com.itheima.mp.domain.po.Address;
 import com.itheima.mp.domain.po.User;
+import com.itheima.mp.domain.query.UserQuery;
 import com.itheima.mp.domain.vo.AddressVO;
 import com.itheima.mp.domain.vo.UserVO;
 import com.itheima.mp.mapper.UserMapper;
@@ -13,10 +17,7 @@ import com.itheima.mp.service.IUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -106,5 +107,44 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         }
 
         return userVOS;
+    }
+
+    @Override
+    public PageDTO<UserVO> queryUsersPage(UserQuery query) {
+        // 1.构建条件
+//        // 1.1.分页条件
+//        Page<User> page = Page.of(query.getPageNo(), query.getPageSize());
+//        // 1.2.排序条件
+//        if (query.getSortBy() != null) {
+//            page.addOrder(new OrderItem(query.getSortBy(), query.getIsAsc()));
+//        }else{
+//            // 默认按照更新时间排序
+//            page.addOrder(new OrderItem("update_time", false));
+//        }
+
+        Page<User> page = query.toMpPageDefaultSortByUpdateTimeDesc();
+
+        // 2.查询
+//        Page<User> p = userService.page(page);
+//        page(page);
+        String name = query.getName();
+        Integer status = query.getStatus();
+        Page<User> p = lambdaQuery().like(name != null, User::getUsername, name)
+                .eq(status != null, User::getStatus, status)
+                .page(page);
+//        // 3.数据非空校验
+//        List<User> records = page.getRecords();
+//        if (records == null || records.size() <= 0) {
+//            // 无数据，返回空结果
+//            return new PageDTO<>(page.getTotal(), page.getPages(), Collections.emptyList());
+//        }
+//        // 4.有数据，转换
+//        List<UserVO> list = BeanUtil.copyToList(records, UserVO.class);
+//        // 5.封装返回
+//        return new PageDTO<>(page.getTotal(), page.getPages(), list);
+        //        封装返回
+        return PageDTO.of(p, UserVO.class);
+
+
     }
 }
