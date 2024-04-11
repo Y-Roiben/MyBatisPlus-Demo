@@ -1,5 +1,7 @@
 package com.itheima.mp.service.Impl;
 
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.mp.domain.po.User;
 import com.itheima.mp.domain.po.UserInfo;
 import com.itheima.mp.service.IUserService;
@@ -82,6 +84,22 @@ class IUserServiceImplTest {
         }
         long e = System.currentTimeMillis();
         System.out.println("耗时：" + (e - b));
+    }
+
+    @Test
+    void testPageQuery() {
+        // 1.分页查询，new Page()的两个参数分别是：页码、每页大小
+        Page<User> page = new Page<>(1, 2);
+//        排序条件
+        page.addOrder(new OrderItem("balance", true));
+        Page<User> p = userService.page(page);
+        // 2.总条数
+        System.out.println("total = " + p.getTotal());
+        // 3.总页数
+        System.out.println("pages = " + p.getPages());
+        // 4.数据
+        List<User> records = p.getRecords();
+        records.forEach(System.out::println);
     }
 
 
